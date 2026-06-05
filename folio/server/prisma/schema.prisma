@@ -1,0 +1,115 @@
+// Folio — data model (Phase 1)
+// Dev uses SQLite for zero-config. For production switch `provider` to
+// "postgresql" and point DATABASE_URL at your Postgres instance.
+// JSON-shaped columns are stored as TEXT (serialized) so the schema stays
+// portable across SQLite/Postgres without provider-specific types.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String    @id @default(cuid())
+  name            String
+  email           String    @unique
+  passwordHash    String
+  avatarInitial   String    @default("U")
+  locale          String    @default("pt")
+  theme           String    @default("light")
+  palette         String    @default("violet")
+  twoFactorEnabled Boolean  @default(false)
+  createdAt       DateTime  @default(now())
+
+  surveys   Survey[]
+  sessions  AuthSession[]
+  accessLogs AccessLog[]
+}
+
+model AuthSession {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token      String   @unique
+  device     String   @default("Unknown")
+  ip         String   @default("")
+  location   String   @default("")
+  createdAt  DateTime @default(now())
+  expiresAt  DateTime
+  revokedAt  DateTime?
+}
+
+model AccessLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  event     String // login | login_failed | logout | password_reset | twofa_enabled
+  method    String   @default("password")
+  device    String   @default("")
+  ip        String   @default("")
+  location  String   @default("")
+  status    String   @default("ok") // ok | fail
+  createdAt DateTime @default(now())
+}
+
+model Survey {
+  id           String   @id @default(cuid())
+  publicId     String   @unique @default(cuid())
+  ownerId      String
+  owner        User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  title        String
+  description  String   @default("")
+  type         String   @default("survey") // survey
+  status       String   @default("draft") // draft | live | paused | scheduled | completed
+  cap          Int      @default(0) // response goal (0 = none)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  publishedAt  DateTime?
+
+  questions Question[]
+  responses SurveyResponse[]
+}
+
+model Question {
+  id        String  @id @default(cuid())
+  surveyId  String
+  survey    Survey  @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  order     Int     @default(0)
+  type      String // single | multi | scale | short | long | nps
+  title     String
+  required  Boolean @default(false)
+  config    String  @default("{}") // JSON: options[], scale{min,max,labels}, etc.
+
+  answers Answer[]
+}
+
+model SurveyResponse {
+  id            String   @id @default(cuid())
+  surveyId      String
+  survey        Survey   @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  respondentName String  @default("")
+  device        String   @default("")
+  os            String   @default("")
+  location      String   @default("")
+  durationSec   Int      @default(0)
+  completionPct Int      @default(100)
+  npsScore      Int?
+  sentiment     String? // pos | neu | neg
+  flagged       Boolean  @default(false)
+  submittedAt   DateTime @default(now())
+
+  answers Answer[]
+}
+
+model Answer {
+  id         String         @id @default(cuid())
+  responseId String
+  response   SurveyResponse @relation(fields: [responseId], references: [id], onDelete: Cascade)
+  questionId String
+  question   Question       @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  value      String         @default("") // JSON-encoded answer value
+}

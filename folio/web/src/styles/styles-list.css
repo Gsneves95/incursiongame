@@ -1,0 +1,98 @@
+/* ── Survey list specific styles ───────────────────────────────── */
+
+.survey-list-wrap {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-1);
+  overflow: hidden;
+}
+
+.survey-list-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 20px; /* aligns with row content now that icon column is gone */
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-2);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.survey-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 20px;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  position: relative;
+  border-bottom: 1px solid var(--line);
+  transition: background .1s;
+}
+.survey-row:last-child { border-bottom: 0; }
+.survey-row:hover { background: var(--surface-2); }
+/* Keep each column's primary value on the same top line as the row title */
+.survey-row > div { padding-top: 1px; }
+/* Fixed-width columns must never shrink, so header labels and row data stay column-aligned */
+.survey-list-head > span[style^="width:"],
+.survey-row > div[style^="width:"] { flex-shrink: 0; }
+
+.survey-row-bar {
+  position: absolute;
+  left: 0;
+  top: 14px;
+  bottom: 14px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+}
+
+@media (max-width: 1100px) {
+  .survey-list-head { display: none; }
+  .survey-row { flex-wrap: wrap; padding: 16px 20px; }
+  .survey-row > div[style*="width: 96px"],
+  .survey-row > div[style*="width: 110px"],
+  .survey-row > div[style*="width: 100px"] {
+    width: auto !important;
+  }
+}
+
+.survey-row-actions {
+  opacity: 0;
+  transition: opacity .12s;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  width: 32px;          /* reserve fixed space so data columns stay aligned with the header */
+  flex-shrink: 0;
+}
+.survey-row:hover .survey-row-actions,
+.survey-row:focus-within .survey-row-actions {
+  opacity: 1;
+}
+
+/* Back button at top of detail view */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ink-3);
+  background: transparent;
+  border: 0;
+  padding: 4px 8px 4px 0;
+  cursor: pointer;
+  border-radius: 6px;
+  font-family: inherit;
+  margin-bottom: 14px;
+}
+.back-link:hover { color: var(--primary); }

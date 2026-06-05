@@ -1,0 +1,211 @@
+/* ── Usability builder specific styles ────────────────────────── */
+
+/* Frame strip — small thumbnails of prototype frames */
+.frame-strip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.frame-thumb {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  width: 64px;
+}
+.frame-thumb-tile {
+  width: 64px;
+  height: 92px;
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+}
+.frame-thumb-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.frame-thumb-label {
+  font-size: 10px;
+  color: var(--ink-3);
+  text-align: center;
+  max-width: 64px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 64px;
+  font-weight: 500;
+}
+
+/* Frame chip for success criteria — selectable */
+.frame-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .12s;
+  font-family: inherit;
+}
+.frame-chip:hover { border-color: var(--primary); }
+.frame-chip.selected {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+/* Step pill in usability left rail */
+.step-pill {
+  display: grid;
+  grid-template-columns: 26px 24px 1fr 16px;
+  gap: 8px;
+  align-items: center;
+  padding: 9px 10px;
+  border-radius: var(--r-md);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition: background .1s;
+  width: 100%;
+}
+.step-pill:hover { background: var(--bg); }
+.step-pill.active {
+  background: var(--primary-soft);
+  border-color: rgba(100,87,246,0.18);
+}
+.step-pill.has-error { background: var(--coral-soft); }
+.step-pill.has-error.active { background: rgba(244,115,98,0.22); border-color: var(--coral); }
+.step-pill-num {
+  font-size: 11px; font-weight: 600;
+  color: var(--ink-4); font-variant-numeric: tabular-nums;
+}
+.step-pill.active .step-pill-num { color: var(--primary); }
+.step-pill-icon {
+  width: 24px; height: 24px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+}
+.step-pill-icon svg { width: 13px; height: 13px; }
+.step-pill-title {
+  font-size: 13px; line-height: 1.3; font-weight: 500;
+  color: var(--ink-2);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.step-pill.active .step-pill-title { color: var(--ink); font-weight: 600; }
+.step-pill-drag {
+  opacity: 0; color: var(--ink-4);
+  transition: opacity .12s;
+}
+.step-pill:hover .step-pill-drag { opacity: 1; }
+
+/* Section header in left rail */
+.rail-section-head {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding: 14px 10px 6px;
+}
+
+/* Success criteria radio group */
+.success-radio {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color .12s, background .12s;
+}
+.success-radio:hover { border-color: var(--line-strong); }
+.success-radio.selected {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+}
+.success-radio-marker {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid var(--ink-4);
+  flex-shrink: 0;
+}
+.success-radio.selected .success-radio-marker {
+  border: 5px solid var(--primary);
+}
+
+/* Toggle (small) */
+.t-toggle {
+  width: 34px; height: 20px;
+  padding: 0; border: 0; cursor: pointer;
+  border-radius: 999px;
+  background: var(--line-strong);
+  position: relative;
+  flex-shrink: 0;
+}
+.t-toggle.on { background: var(--primary); }
+.t-toggle::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 14px; height: 14px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+.t-toggle.on::after { left: 17px; }
+
+/* Popover (used for "+ Novo" chooser) */
+.popover-shell {
+  position: absolute;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-popover);
+  z-index: 50;
+  min-width: 280px;
+  overflow: hidden;
+}
+.popover-item {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  width: 100%;
+  transition: background .1s;
+}
+.popover-item:hover { background: var(--bg); }
+.popover-item + .popover-item { border-top: 1px solid var(--line); }
+.popover-item-icon {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.popover-item-title {
+  font-size: 13.5px; font-weight: 600; color: var(--ink);
+}
+.popover-item-desc {
+  font-size: 12px; color: var(--ink-3); margin-top: 2px;
+}
